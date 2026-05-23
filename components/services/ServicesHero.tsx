@@ -1,26 +1,32 @@
-import React from 'react';
+import React from "react";
 
-const ServicesHero = () => {
-  return (
-    <section className="relative px-8 mb-24 overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_50%,rgba(98,54,255,0.15)_0%,transparent_70%)]"></div>
-      <div className="max-w-7xl mx-auto text-center">
-        <div className="inline-block mb-6 px-4 py-1 rounded-full border border-outline-variant/20 bg-surface-container-highest/30 backdrop-blur-sm">
-          <span className="text-xs font-bold tracking-widest text-primary uppercase">Innovation Redefined</span>
-        </div>
-        <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 bg-gradient-to-b from-on-surface to-on-surface-variant bg-clip-text text-transparent">
-          Premium Digital Solutions
-        </h1>
-        <p className="text-xl text-on-surface-variant max-w-2xl mx-auto mb-12 leading-relaxed">
-          We transform ambitious businesses through high-end technology, creating immersive digital experiences that resonate with the modern elite.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4 relative">
-          <div className="w-24 h-24 rounded-full bg-primary/10 blur-3xl absolute -left-10 top-20 pointer-events-none"></div>
-          <div className="w-32 h-32 rounded-full bg-secondary/10 blur-3xl absolute -right-10 bottom-0 pointer-events-none"></div>
-        </div>
-      </div>
-    </section>
-  );
-};
+const ServicesHero = () => (
+  <section
+    className="relative overflow-hidden text-center"
+    style={{
+      paddingTop: "120px",
+      paddingBottom: "100px",
+    }}
+  >
+    <div className="relative z-10 max-w-3xl mx-auto px-6">
+      <span
+        className="inline-block text-xs font-bold uppercase tracking-widest mb-4"
+        style={{ color: "#a8e600", letterSpacing: "2px" }}
+      >
+        What I Offer
+      </span>
+      <h1
+        className="font-syne text-5xl md:text-6xl font-extrabold mb-4"
+        style={{ letterSpacing: "-2px" }}
+      >
+        Digital Solutions That{" "}
+        <span style={{ color: "#a8e600" }}>Deliver Results.</span>
+      </h1>
+      <p className="text-base md:text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: "#9aaa9a" }}>
+        End-to-end IT services tailored for businesses that want to grow — from concept and design to deployment and support.
+      </p>
+    </div>
+  </section>
+);
 
 export default ServicesHero;

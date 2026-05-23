@@ -1,16 +1,26 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Syne, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const syne = Syne({
+  variable: "--font-syne",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
-  title: "dulcoon.dev | Premium Digital Solutions",
-  description: "High-performance web and mobile experiences tailored for high-end brands and tech innovators.",
+  title: "dulcoon.dev | Full-Stack Developer & IT Solutions",
+  description: "I build high-performance web apps, mobile apps, and digital solutions that help businesses grow. Based in Indonesia.",
 };
+
+import GlobalBackground from "@/components/GlobalBackground";
 
 export default function RootLayout({
   children,
@@ -18,20 +28,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark h-full">
+    <html lang="en" className="h-full">
       <head>
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         />
       </head>
-      <body className={`${inter.variable} antialiased mesh-bg min-h-screen text-on-surface relative`}>
-        {/* Global Ambient Glows (Fixed Across All Sections) */}
-        <div className="fixed -top-40 -left-40 w-[40rem] h-[40rem] bg-primary/15 blur-[150px] rounded-full pointer-events-none -z-10"></div>
-        <div className="fixed top-[40%] right-[-10%] w-[40rem] h-[40rem] bg-secondary/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
-        <div className="fixed -bottom-40 -left-20 w-[40rem] h-[40rem] bg-tertiary/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
-
-        {children}
+      <body className={`${syne.variable} ${dmSans.variable} antialiased min-h-screen relative`}>
+        <GlobalBackground />
+        <div className="relative z-0">
+          {children}
+        </div>
       </body>
     </html>
   );

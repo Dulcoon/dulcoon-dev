@@ -15,151 +15,230 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const project = getProjectBySlug(slug);
   if (!project) return notFound();
 
+  const whatsappUrl = `https://wa.me/6282253400079?text=Halo%2C%20saya%20tertarik%20dengan%20layanan%20serupa%20untuk%20proyek%20${encodeURIComponent(project.title)}.`;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto flex-1 w-full">
+      <main className="flex-1 w-full max-w-[1900px] mx-auto px-5 md:px-16 xl:px-24" style={{ paddingTop: "100px", paddingBottom: "80px" }}>
 
-        {/* Hero */}
+        {/* ── Hero ── */}
         <section className="mb-16">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
             <div className="max-w-3xl">
-              <span className="inline-block bg-surface-container-highest/40 px-3 py-1 rounded-full text-[0.6875rem] font-bold tracking-[0.05em] text-primary uppercase border border-outline-variant/20 mb-4">
+              <span
+                className="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-4"
+                style={{ background: "rgba(168,230,0,0.1)", border: "1px solid rgba(168,230,0,0.2)", color: "#a8e600" }}
+              >
                 {project.category}
               </span>
-              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter text-white mb-6 leading-tight">
+              <h1
+                className="font-syne text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight"
+                style={{ letterSpacing: "-1px" }}
+              >
                 {project.title}
               </h1>
-              <p className="text-xl text-on-surface-variant max-w-2xl leading-relaxed">
+              <p className="text-base md:text-lg leading-relaxed" style={{ color: "#9aaa9a" }}>
                 {project.shortDescription}
               </p>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {project.tags.map((tag) => (
-                <span key={tag.name} className={`px-4 py-2 glass-panel rounded-full text-sm font-medium ${tag.colorClass}`}>
+                <span
+                  key={tag.name}
+                  className="px-3 py-1.5 rounded-full text-xs font-medium"
+                  style={{ background: "rgba(168,230,0,0.08)", border: "1px solid rgba(168,230,0,0.18)", color: "#a8e600" }}
+                >
                   {tag.name}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 mb-12 items-center">
-            <div className={!project.demoLink ? 'cursor-not-allowed inline-block' : 'inline-block'}>
+          {/* Demo button */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-10 items-center">
+            {project.demoLink ? (
               <a
-                href={project.demoLink || undefined}
+                href={project.demoLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold transition-all ${!project.demoLink
-                    ? 'bg-surface-container-highest/40 text-on-surface-variant/40 pointer-events-none border border-outline-variant/10 select-none'
-                    : 'bg-gradient-to-r from-primary to-secondary text-on-primary hover:shadow-[0_0_30px_rgba(201,191,255,0.4)] active:scale-95'
-                  }`}
+                className="btn-primary"
+                style={{ padding: "13px 28px" }}
               >
-                <span className="material-symbols-outlined text-[22px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  {project.demoLink ? 'rocket_launch' : 'block'}
-                </span>
-                {project.demoLink ? 'View Live Demo' : 'Live Demo Offline'}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/>
+                </svg>
+                View Live Demo
               </a>
-            </div>
-
-            {!project.demoLink && (
-              <div className="flex items-center gap-2 text-on-surface-variant/50 text-sm italic">
-                <span className="material-symbols-outlined text-sm">info</span>
-                This project is currently private or restricted.
+            ) : (
+              <div
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid #222822", color: "#6a7a6a" }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Demo Offline (Private Project)
               </div>
             )}
           </div>
 
-          <div className="relative w-full aspect-video rounded-xl overflow-hidden glass-panel p-4 shadow-[0_0_80px_-20px_rgba(201,191,255,0.15)]">
-            <div className="w-full h-full rounded-[2.5rem] overflow-hidden bg-surface-container-low relative">
-              <img alt={project.title} className="w-full h-full object-cover" src={project.heroImage} />
-              <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 to-transparent"></div>
-            </div>
+          {/* Hero image */}
+          <div
+            className="relative w-full rounded-xl overflow-hidden"
+            style={{ border: "1px solid #222822", aspectRatio: "16/9" }}
+          >
+            <img
+              alt={project.title}
+              className="w-full h-full object-cover"
+              src={project.heroImage}
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: "linear-gradient(to top, rgba(11,13,11,0.5) 0%, transparent 50%)" }}
+            />
           </div>
         </section>
 
-        {/* Overview & Impact */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-24">
-          <div className="lg:col-span-8 space-y-8">
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-6">Overview</h2>
-              {project.overviewText.map((text, i) => (
-                <p key={i} className="text-on-surface-variant text-lg leading-relaxed mt-4 first:mt-0">{text}</p>
-              ))}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-8 rounded-xl glass-panel">
-                <h3 className="text-tertiary font-bold mb-2">The Mission</h3>
-                <p className="text-on-surface-variant">{project.mission}</p>
+        {/* ── Overview & Impact ── */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-20">
+          <div className="lg:col-span-8 flex flex-col gap-6">
+            <h2 className="font-syne text-2xl font-bold" style={{ letterSpacing: "-0.5px" }}>Overview</h2>
+            {project.overviewText.map((text, i) => (
+              <p key={i} className="text-base leading-relaxed" style={{ color: "#9aaa9a" }}>{text}</p>
+            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+              <div className="rounded-xl p-6" style={{ background: "#141714", border: "1px solid #222822" }}>
+                <h3 className="font-syne text-sm font-bold mb-2" style={{ color: "#a8e600" }}>The Mission</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#9aaa9a" }}>{project.mission}</p>
               </div>
-              <div className="p-8 rounded-xl glass-panel">
-                <h3 className="text-secondary font-bold mb-2">The Client</h3>
-                <p className="text-on-surface-variant">{project.client}</p>
+              <div className="rounded-xl p-6" style={{ background: "#141714", border: "1px solid #222822" }}>
+                <h3 className="font-syne text-sm font-bold mb-2" style={{ color: "#a8e600" }}>The Client</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#9aaa9a" }}>{project.client}</p>
               </div>
             </div>
           </div>
+
           <div className="lg:col-span-4">
-            <div className="p-10 rounded-xl bg-gradient-to-br from-primary-container to-surface-container-highest relative overflow-hidden flex flex-col justify-center items-center text-center">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-tertiary/20 blur-3xl rounded-full"></div>
-              <span className="text-6xl font-black text-white mb-4 tracking-tighter">{project.impactMetric.value}</span>
-              <h3 className="text-xl font-bold text-on-primary-container mb-2">{project.impactMetric.label}</h3>
-              <p className="text-on-primary-container/80 text-sm">{project.impactMetric.subtext}</p>
+            <div
+              className="rounded-xl p-8 relative overflow-hidden flex flex-col justify-center items-center text-center"
+              style={{ background: "#111411", border: "1px solid rgba(168,230,0,0.2)", minHeight: "180px" }}
+            >
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ background: "radial-gradient(ellipse 70% 70% at 50% 50%, rgba(168,230,0,0.06) 0%, transparent 70%)" }}
+              />
+              <span
+                className="font-syne font-extrabold mb-2 relative z-10"
+                style={{ fontSize: "56px", color: "#a8e600", lineHeight: 1 }}
+              >
+                {project.impactMetric.value}
+              </span>
+              <h3 className="font-syne text-base font-bold mb-1 relative z-10">{project.impactMetric.label}</h3>
+              <p className="text-xs relative z-10" style={{ color: "#9aaa9a" }}>{project.impactMetric.subtext}</p>
             </div>
           </div>
         </section>
 
-        {/* Features Bento Grid */}
-        <section className="mb-24">
-          <h2 className="text-3xl font-bold text-white mb-12 text-center">Core Ecosystem Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* ── Features ── */}
+        <section className="mb-20">
+          <h2 className="font-syne text-2xl font-bold mb-8 text-center" style={{ letterSpacing: "-0.5px" }}>Core Features</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {project.features.map((feat) => (
-              <div key={feat.title} className={`${feat.colSpan === 2 ? 'md:col-span-2' : ''} p-10 rounded-xl glass-panel flex flex-col justify-between min-h-[200px]`}>
-                <span className={`material-symbols-outlined text-5xl ${feat.textColor} mb-6`} style={{ fontVariationSettings: "'FILL' 1" }}>{feat.icon}</span>
+              <div
+                key={feat.title}
+                className={`${feat.colSpan === 2 ? 'md:col-span-2' : ''} p-8 rounded-xl flex flex-col gap-4`}
+                style={{ background: "#141714", border: "1px solid #222822" }}
+              >
+                <span
+                  className="material-symbols-outlined text-4xl"
+                  style={{ color: "#a8e600", fontVariationSettings: "'FILL' 1" }}
+                >
+                  {feat.icon}
+                </span>
                 <div>
-                  <h3 className="text-2xl font-bold text-white mb-4">{feat.title}</h3>
-                  <p className="text-on-surface-variant max-w-md">{feat.description}</p>
+                  <h3 className="font-syne text-lg font-bold mb-2">{feat.title}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#9aaa9a" }}>{feat.description}</p>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Tech Stack */}
-        <section className="mb-24 py-12 border-y border-outline-variant/10 flex flex-col items-center">
-          <h2 className="text-sm font-bold tracking-widest text-outline mb-8 uppercase">The Tech Stack</h2>
-          <div className="flex flex-wrap justify-center gap-12 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+        {/* ── Tech Stack ── */}
+        <section
+          className="mb-20 py-10 flex flex-col items-center"
+          style={{ borderTop: "1px solid #222822", borderBottom: "1px solid #222822" }}
+        >
+          <h2 className="text-xs font-bold tracking-widest uppercase mb-7" style={{ color: "#6a7a6a" }}>
+            Tech Stack
+          </h2>
+          <div className="flex flex-wrap justify-center gap-3">
             {project.techStack.map((tech) => (
-              <span key={tech} className="text-xl font-bold text-white">{tech}</span>
+              <span
+                key={tech}
+                className="px-4 py-2 rounded-lg text-sm font-medium"
+                style={{ background: "#141714", border: "1px solid #222822", color: "#9aaa9a" }}
+              >
+                {tech}
+              </span>
             ))}
           </div>
         </section>
 
-        {/* Gallery */}
+        {/* ── Gallery ── */}
         <ProjectGallery gallery={project.gallery} projectTitle={project.title} />
 
-        {/* Back Link */}
-        <div className="flex justify-start mb-24">
-          <Link href="/projects" className="flex items-center gap-3 text-on-surface-variant hover:text-white transition-colors group">
-            <span className="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
-            <span className="font-bold">Back to Portfolio</span>
+        {/* ── Back link ── */}
+        <div className="flex justify-start mb-16">
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 text-sm font-semibold transition-colors duration-200 text-[#9aaa9a] hover:text-[#a8e600]"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 5l-7 7 7 7" />
+            </svg>
+            Back to Portfolio
           </Link>
         </div>
 
-        {/* CTA */}
-        <section className="relative p-12 md:p-20 rounded-xl glass-panel overflow-hidden text-center">
-          <div className="absolute -top-24 -left-24 w-64 h-64 bg-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
-          <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-tertiary/10 blur-[100px] rounded-full pointer-events-none"></div>
-          <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">Want a similar system for your business?</h2>
-          <p className="text-on-surface-variant text-lg max-w-2xl mx-auto mb-10">
-            We specialize in building bespoke digital ecosystems for high-end brands worldwide.
+        {/* ── Bottom CTA ── */}
+        <section
+          className="relative overflow-hidden rounded-xl text-center px-6 py-12 md:px-12 md:py-14"
+          style={{
+            background: "#111411",
+            border: "1px solid #222822",
+          }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "radial-gradient(ellipse 50% 60% at 50% 0%, rgba(168,230,0,0.05) 0%, transparent 70%)" }}
+          />
+          <h2
+            className="font-syne text-3xl md:text-4xl font-extrabold mb-3 relative z-10"
+            style={{ letterSpacing: "-1px" }}
+          >
+            Want a similar solution for your business?
+          </h2>
+          <p className="text-sm mb-8 relative z-10" style={{ color: "#9aaa9a" }}>
+            I build bespoke digital products tailored to your specific business goals and audience.
           </p>
-          <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-            <button className="bg-gradient-to-r from-primary to-secondary text-on-primary px-10 py-4 rounded-full font-bold text-lg hover:shadow-[0_0_30px_rgba(201,191,255,0.4)] transition-all active:scale-95">
+          <div className="flex flex-col md:flex-row gap-4 justify-center items-center relative z-10">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              style={{ padding: "14px 32px", fontSize: "15px" }}
+            >
               Start Your Project
-            </button>
-            <button className="bg-surface-container-highest/60 text-white px-10 py-4 rounded-full font-bold text-lg border border-outline-variant/30 hover:bg-surface-container-highest transition-all active:scale-95 flex items-center gap-2">
-              <span className="material-symbols-outlined">chat</span>
-              Contact via WhatsApp
-            </button>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+            <Link href="/projects" className="btn-ghost" style={{ padding: "14px 28px" }}>
+              View More Projects
+            </Link>
           </div>
         </section>
       </main>

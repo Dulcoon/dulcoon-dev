@@ -3,30 +3,69 @@ import Link from 'next/link';
 import { projectsData } from '@/lib/projects';
 
 const ProjectsFeatured = () => {
-  const featured = projectsData[0]; // Lumina as featured
+  const featured = projectsData[0];
 
   return (
-    <section className="container px-6 mx-auto py-24">
-      <div className="glass-panel rounded-xl overflow-hidden grid lg:grid-cols-2 gap-0">
-        <div className="relative min-h-[400px] group overflow-hidden">
-          <img alt={featured.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src={featured.heroImage} />
-          <div className="absolute inset-0 bg-surface-container-lowest/20 group-hover:bg-transparent transition-colors duration-500"></div>
+    <section className="max-w-[1900px] mx-auto px-8 md:px-16 xl:px-24 py-16">
+      <div
+        className="rounded-xl overflow-hidden grid lg:grid-cols-2"
+        style={{ background: "#141714", border: "1px solid #222822" }}
+      >
+        {/* Image */}
+        <div className="relative min-h-[380px] group overflow-hidden">
+          <img
+            alt={featured.title}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            src={featured.heroImage}
+            style={{ opacity: 0.8 }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{ background: "linear-gradient(to right, transparent 60%, #141714 100%)" }}
+          />
         </div>
-        <div className="p-12 md:p-16 flex flex-col justify-center">
-          <span className="text-sm text-primary tracking-[0.2em] font-bold mb-4 uppercase">Featured Case Study</span>
-          <h2 className="text-4xl font-bold tracking-tight text-white mb-6">{featured.title}</h2>
-          <p className="text-on-surface-variant text-lg mb-8 leading-relaxed">{featured.overviewText[0]?.slice(0, 180)}...</p>
-          <div className="flex flex-wrap gap-3 mb-10">
+
+        {/* Content */}
+        <div className="p-10 md:p-14 flex flex-col justify-center">
+          <span
+            className="text-xs font-bold uppercase tracking-widest mb-4 block"
+            style={{ color: "#a8e600", letterSpacing: "2px" }}
+          >
+            Featured Case Study
+          </span>
+          <h2
+            className="font-syne text-3xl font-extrabold mb-4"
+            style={{ letterSpacing: "-1px" }}
+          >
+            {featured.title}
+          </h2>
+          <p className="text-sm leading-relaxed mb-7" style={{ color: "#9aaa9a" }}>
+            {featured.overviewText[0]?.slice(0, 180)}...
+          </p>
+
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-8">
             {featured.tags.map((tag) => (
-              <span key={tag.name} className="bg-surface-container-highest/60 text-secondary-fixed-dim px-4 py-1.5 rounded-full text-xs font-bold border border-outline-variant/20">{tag.name}</span>
+              <span
+                key={tag.name}
+                className="px-3 py-1 text-xs rounded-full font-medium"
+                style={{ background: "rgba(168,230,0,0.08)", border: "1px solid rgba(168,230,0,0.18)", color: "#a8e600" }}
+              >
+                {tag.name}
+              </span>
             ))}
           </div>
-          <div>
-            <Link href={`/projects/${featured.slug}`} className="inline-flex bg-gradient-to-r from-primary to-secondary text-on-primary px-8 py-4 rounded-full font-bold hover:shadow-[0_0_20px_rgba(201,191,255,0.4)] transition-all items-center gap-2 group">
-              View Case Study
-              <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-            </Link>
-          </div>
+
+          <Link
+            href={`/projects/${featured.slug}`}
+            className="btn-primary self-start"
+            style={{ padding: "12px 24px" }}
+          >
+            View Case Study
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

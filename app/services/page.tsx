@@ -9,7 +9,7 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="relative pt-32 flex-1">
+      <main className="relative flex-1">
         <ServicesHero />
         <ServicesShowcase />
         <ServicesCTA />
