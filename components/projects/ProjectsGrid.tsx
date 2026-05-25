@@ -2,15 +2,15 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { projectsData } from '@/lib/projects';
+import type { ProjectData } from '@/lib/projects';
 
 const FILTERS = ['All', 'Website', 'Mobile App', 'System'];
 
-const ProjectsGrid = () => {
+const ProjectsGrid = ({ projects }: { projects: ProjectData[] }) => {
   const [activeFilter, setActiveFilter] = useState('All');
   const filtered = activeFilter === 'All'
-    ? projectsData
-    : projectsData.filter(p => p.filterTag === activeFilter);
+    ? projects
+    : projects.filter(p => p.filterTag === activeFilter);
 
   return (
     <section className="max-w-[1900px] mx-auto px-8 md:px-16 xl:px-24 pb-20">

@@ -8,8 +8,11 @@ import Testimonials from "@/components/home/Testimonials";
 import Pricing from "@/components/home/Pricing";
 import CTA from "@/components/home/CTA";
 import Footer from "@/components/Footer";
+import { getProjectsData } from "@/lib/projects";
 
-export default function Home() {
+export default async function Home() {
+  const projects = await getProjectsData();
+
   return (
     <>
       <Navbar />
@@ -17,7 +20,7 @@ export default function Home() {
       <TrustedBy />
       <Services />
       <Process />
-      <Portfolio />
+      <Portfolio projects={projects} />
       <Testimonials />
       <Pricing />
       <CTA />

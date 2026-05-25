@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import Link from "next/link";
-import { projectsData } from "@/lib/projects";
+import type { ProjectData } from "@/lib/projects";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -11,16 +11,14 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const Portfolio = () => {
+const Portfolio = ({ projects }: { projects: ProjectData[] }) => {
   const containerRef = useRef<HTMLElement>(null);
-  const recentProjects = projectsData.slice(0, 4);
+  const recentProjects = projects.slice(0, 4);
 
   useGSAP(() => {
     const images = gsap.utils.toArray(".parallax-image") as HTMLImageElement[];
     
     images.forEach((img) => {
-      // Create a smooth parallax movement
-      // The image is rendered larger (scale 1.15) to allow space for y-translation
       gsap.fromTo(
         img,
         { yPercent: -15 },
@@ -29,14 +27,16 @@ const Portfolio = () => {
           ease: "none",
           scrollTrigger: {
             trigger: img.parentElement,
-            start: "top bottom", // Animation starts when top of card hits bottom of viewport
-            end: "bottom top",   // Animation ends when bottom of card hits top of viewport
-            scrub: true,         // Links animation to scrollbar position
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
           },
         }
       );
     });
   }, { scope: containerRef });
+
+  if (recentProjects.length === 0) return null;
 
   return (
     <section ref={containerRef} style={{ padding: "100px 0" }}>
@@ -87,7 +87,7 @@ const Portfolio = () => {
                 <div className="w-full h-full overflow-hidden absolute inset-0">
                   <img
                     className="parallax-image w-full h-full object-cover transition-transform duration-700"
-                    style={{ opacity: 0.65, scale: 1.15 }} // Scaled up to hide edges during parallax y-translation
+                    style={{ opacity: 0.65, scale: 1.15 }}
                     alt={project.title}
                     src={project.heroImage}
                   />
@@ -99,7 +99,7 @@ const Portfolio = () => {
                   style={{
                     background: "linear-gradient(to top, rgba(11,13,11,0.92) 0%, rgba(11,13,11,0.25) 50%, transparent 100%)",
                     padding: isSmall ? "20px" : "28px",
-                    minHeight: isSmall ? "280px" : "400px" // Fallback height
+                    minHeight: isSmall ? "280px" : "400px"
                   }}
                 >
                   {/* Tags */}

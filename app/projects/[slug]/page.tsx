@@ -7,12 +7,13 @@ import ProjectGallery from '@/components/projects/ProjectGallery';
 import { getProjectBySlug, getAllProjectSlugs } from '@/lib/projects';
 
 export async function generateStaticParams() {
-  return getAllProjectSlugs().map((slug) => ({ slug }));
+  const slugs = await getAllProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getProjectBySlug(slug);
   if (!project) return notFound();
 
   const whatsappUrl = `https://wa.me/6282253400079?text=Halo%2C%20saya%20tertarik%20dengan%20layanan%20serupa%20untuk%20proyek%20${encodeURIComponent(project.title)}.`;

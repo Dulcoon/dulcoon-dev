@@ -1,9 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import { projectsData } from '@/lib/projects';
+import type { ProjectData } from '@/lib/projects';
 
-const ProjectsFeatured = () => {
-  const featured = projectsData[0];
+const ProjectsFeatured = ({ projects }: { projects: ProjectData[] }) => {
+  const featured = projects[0];
+
+  if (!featured) return null;
 
   return (
     <section className="max-w-[1900px] mx-auto px-8 md:px-16 xl:px-24 py-16">
