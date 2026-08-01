@@ -1,130 +1,134 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    const currentTheme =
+      (document.documentElement.getAttribute("data-theme") as "dark" | "light") || "dark";
+    setTheme(currentTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    document.documentElement.setAttribute("data-theme", nextTheme);
+    try {
+      localStorage.setItem("theme", nextTheme);
+    } catch {}
+  };
 
   const navItems = [
-    { 
-      name: "Home", 
-      href: "/",
-      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    },
-    { 
-      name: "Services", 
-      href: "/services",
-      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-    },
-    { 
-      name: "Projects", 
-      href: "/projects",
-      icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    },
+    { name: "Home", href: "/" },
+    { name: "Services", href: "/services" },
+    { name: "Projects", href: "/projects" },
+    { name: "Contact", href: "/contact" },
   ];
+
+  const isLinkActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname === href || pathname?.startsWith(href + "/");
+  };
 
   return (
     <>
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 md:px-16 xl:px-24"
-        style={{
-          height: "68px",
-          background: "rgba(11, 13, 11, 0.45)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          borderBottom: "1px solid rgba(168, 230, 0, 0.12)",
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.15)",
-        }}
-      >
-        {/* Logo */}
-        <Link
-          href="/"
-          className="font-syne text-2xl font-extrabold tracking-tight"
-          style={{ letterSpacing: "-0.5px" }}
-        >
-          dulcoon<span style={{ color: "#a8e600" }}>.dev</span>
-        </Link>
+      {/* ===== DESKTOP / MAIN NAVBAR ===== */}
+      <nav className="nav">
+        <div className="nav-inner">
+          <Link href="/" className="logo">
+            <span className="logo-dot"></span>
+            dulcoon.dev
+          </Link>
 
-        {/* Desktop Nav */}
-        <ul className="hidden lg:flex items-center gap-9 list-none">
-          {navItems.map((item) => {
-            const isActive =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname === item.href || pathname?.startsWith(item.href + "/");
-            return (
-              <li key={item.name}>
+          <div className="nav-links">
+            {navItems.map((item) => {
+              const active = isLinkActive(item.href);
+              return (
                 <Link
+                  key={item.name}
                   href={item.href}
-                  className="transition-colors duration-200 text-[15px] font-semibold"
-                  style={{
-                    color: isActive ? "#a8e600" : "#9aaa9a",
-                    fontFamily: "var(--font-dm)",
-                  }}
+                  className={active ? "active" : ""}
                 >
                   {item.name}
                 </Link>
-              </li>
-            );
-          })}
-        </ul>
+              );
+            })}
+          </div>
 
-        {/* Desktop CTA */}
-        <div className="hidden lg:flex items-center">
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 btn-primary text-[15px] font-semibold"
-          >
-            Get a Free Consultation
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </Link>
+          <div className="nav-right">
+            <button
+              className="theme-toggle"
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              type="button"
+            >
+              {/* Sun Icon for Light Mode */}
+              <svg className="icon icon-sun" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+              </svg>
+              {/* Moon Icon for Dark Mode */}
+              <svg className="icon icon-moon" viewBox="0 0 24 24">
+                <path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z" />
+              </svg>
+            </button>
+
+            <Link href="/contact" className="btn btn-primary nav-cta">
+              Get a Free Consultation
+            </Link>
+          </div>
         </div>
       </nav>
 
-      {/* Mobile Bottom Navbar (Glassmorphism) */}
-      <nav
-        className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 lg:hidden flex items-center justify-between w-[92%] max-w-[340px] px-4 py-2.5 rounded-full"
-        style={{
-          background: "rgba(16, 18, 16, 0.45)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          border: "1px solid rgba(168, 230, 0, 0.12)",
-          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.6)",
-        }}
-      >
-        {navItems.map((item) => {
-          const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname === item.href || pathname?.startsWith(item.href + "/");
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`relative flex flex-col items-center justify-center w-14 h-12 transition-colors duration-300 ${
-                isActive ? "text-[#a8e600]" : "text-[#7a8a7a] hover:text-[#f5f5f5]"
-              }`}
-            >
-              {item.icon}
-              <span className="text-[11px] font-bold mt-1 tracking-wider">{item.name}</span>
-            </Link>
-          );
-        })}
-        {/* Contact CTA in bottom nav */}
+      {/* ===== MOBILE BOTTOM PILL NAV ===== */}
+      <div className="mobile-tab">
+        <Link
+          href="/"
+          className={pathname === "/" ? "active" : ""}
+          aria-label="Home"
+        >
+          <svg className="icon" viewBox="0 0 24 24">
+            <path d="M3 11l9-8 9 8" />
+            <path d="M5 10v10h14V10" />
+          </svg>
+        </Link>
+        <Link
+          href="/services"
+          className={pathname?.startsWith("/services") ? "active" : ""}
+          aria-label="Services"
+        >
+          <svg className="icon" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+          </svg>
+        </Link>
+        <Link
+          href="/projects"
+          className={pathname?.startsWith("/projects") ? "active" : ""}
+          aria-label="Projects"
+        >
+          <svg className="icon" viewBox="0 0 24 24">
+            <path d="M3 6a1 1 0 011-1h5l2 2h9a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1z" />
+          </svg>
+        </Link>
         <Link
           href="/contact"
-          className={`relative flex flex-col items-center justify-center w-14 h-12 transition-colors duration-300 ${
-            pathname === "/contact" ? "text-[#a8e600]" : "text-[#7a8a7a] hover:text-[#f5f5f5]"
-          }`}
+          className={pathname?.startsWith("/contact") ? "active" : ""}
+          aria-label="Contact"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          <span className="text-[11px] font-bold mt-1 tracking-wider">Contact</span>
+          <svg className="icon" viewBox="0 0 24 24">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M2 6l10 7 10-7" />
+          </svg>
         </Link>
-      </nav>
+      </div>
     </>
   );
 };

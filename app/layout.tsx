@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans } from "next/font/google";
+import { Syne, DM_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
+import InteractiveEffects from "@/components/InteractiveEffects";
+import ThreeCanvas from "@/components/ThreeCanvas";
+import CursorSpotlight from "@/components/CursorSpotlight";
 
 // Execute image conversion on dev mount
 if (process.env.NODE_ENV === "development") {
@@ -45,9 +48,15 @@ const dmSans = DM_Sans({
   style: ["normal", "italic"],
 });
 
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "dulcoon.dev | Full-Stack Developer & IT Solutions",
-  description: "I build high-performance web apps, mobile apps, and digital solutions that help businesses grow. Based in Indonesia.",
+  title: "dulcoon.dev — Your Digital Success Partner",
+  description: "I build high-performance web apps, mobile apps, and custom IT solutions that help businesses grow in the digital era. Based in Indonesia.",
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -62,26 +71,47 @@ export const metadata: Metadata = {
   },
 };
 
-import GlobalBackground from "@/components/GlobalBackground";
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" data-theme="dark" suppressHydrationWarning className="h-full">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
+          rel="stylesheet"
+        />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  var theme = saved || 'dark';
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch(e) {}
+              })();
+            `,
+          }}
         />
       </head>
-      <body className={`${syne.variable} ${dmSans.variable} antialiased min-h-screen relative`}>
-        <GlobalBackground />
-        <div className="relative z-0">
-          {children}
-        </div>
+      <body
+        suppressHydrationWarning
+        className={`${syne.variable} ${dmSans.variable} ${spaceMono.variable} antialiased min-h-screen relative`}
+      >
+        <ThreeCanvas />
+        <CursorSpotlight />
+        <div className="scroll-progress" id="scrollProgress" />
+        <InteractiveEffects />
+        <div className="relative z-10">{children}</div>
       </body>
     </html>
   );

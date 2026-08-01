@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 
 interface ProjectGalleryProps {
   gallery: string[];
@@ -24,120 +24,308 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ gallery, projectTitle }
     }
   }, [selectedIdx, gallery.length]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedIdx === null) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowRight') nextImage();
-      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedIdx, closeLightbox, nextImage, prevImage]);
 
-  // Lock body scroll
   useEffect(() => {
     if (selectedIdx !== null) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [selectedIdx]);
 
-  if (gallery.length === 0) return null;
+  if (!gallery || gallery.length === 0) return null;
 
   return (
-    <section className="mb-24">
-      <h2 className="font-syne text-3xl font-extrabold mb-12" style={{ letterSpacing: "-1px" }}>Project Screenshots</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {gallery.map((img, i) => (
-          <div 
-            key={i} 
-            className="aspect-square rounded-xl overflow-hidden p-3 group cursor-pointer bg-[#141714] border border-[#222822] hover:border-[rgba(168,230,0,0.3)] transition-all duration-300"
-            onClick={() => setSelectedIdx(i)}
-          >
-            <div className="relative w-full h-full overflow-hidden rounded-lg bg-[#0b0d0b]">
-              <img 
-                alt={`${projectTitle} screenshot ${i + 1}`} 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100" 
-                src={img} 
-              />
-              <div className="absolute inset-0 bg-[#141714]/0 group-hover:bg-[#141714]/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-500">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#a8e600" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
-                </svg>
+    <section className="section" style={{ paddingTop: "20px" }}>
+      <div className="wrap">
+        <div className="section-head" data-reveal style={{ textAlign: "center", marginBottom: "40px" }}>
+          <span className="section-tag">Visual Showcase</span>
+          <h2 className="section-title">Project Screenshots</h2>
+        </div>
+
+        {/* Gallery Grid */}
+        <div
+          data-reveal
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: "24px",
+            justifyContent: "center",
+          }}
+        >
+          {gallery.map((img, i) => (
+            <div
+              key={i}
+              onClick={() => setSelectedIdx(i)}
+              className="folio-card"
+              style={{
+                cursor: "pointer",
+                borderRadius: "var(--radius-md)",
+                overflow: "hidden",
+                border: "1px solid var(--border)",
+                background: "var(--bg-soft)",
+                transition: "all 0.3s var(--ease)",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  maxHeight: "420px",
+                  overflow: "hidden",
+                  background: "var(--surface-2)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "12px",
+                }}
+              >
+                <img
+                  alt={`${projectTitle} screenshot ${i + 1}`}
+                  src={img}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "380px",
+                    objectFit: "contain",
+                    borderRadius: "var(--radius-sm)",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+                    transition: "transform 0.5s var(--ease)",
+                  }}
+                  className="gallery-thumb-img"
+                />
+                {/* Hover overlay icon */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "var(--accent-soft)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    opacity: 0,
+                    transition: "opacity 0.3s var(--ease)",
+                  }}
+                  className="folio-hover-overlay"
+                >
+                  <div
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "50%",
+                      background: "var(--accent)",
+                      color: "var(--accent-ink)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <svg className="icon" viewBox="0 0 24 24" style={{ width: "20px", height: "20px" }}>
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                      <line x1="11" y1="8" x2="11" y2="14" />
+                      <line x1="8" y1="11" x2="14" y2="11" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{
+                  padding: "14px 18px",
+                  borderTop: "1px solid var(--border)",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.75rem",
+                    color: "var(--text-muted)",
+                  }}
+                >
+                  Screenshot 0{i + 1}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.75rem",
+                    color: "var(--accent)",
+                  }}
+                >
+                  Expand ↗
+                </span>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* Lightbox Modal */}
       {selectedIdx !== null && (
-        <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12 animate-in fade-in duration-300"
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "24px",
+          }}
           role="dialog"
           aria-modal="true"
         >
           {/* Backdrop */}
-          <div 
-            className="absolute inset-0 bg-[#0b0d0b]/90 backdrop-blur-md"
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "rgba(0, 0, 0, 0.85)",
+              backdropFilter: "blur(12px)",
+            }}
             onClick={closeLightbox}
           />
 
           {/* Close Button */}
-          <button 
-            className="absolute top-8 right-8 z-[110] p-3 rounded-full bg-[#141714] border border-[#222822] text-[#9aaa9a] hover:text-[#a8e600] hover:border-[#a8e600] transition-all active:scale-90"
+          <button
+            style={{
+              position: "absolute",
+              top: "24px",
+              right: "24px",
+              zIndex: 1001,
+              width: "44px",
+              height: "44px",
+              borderRadius: "50%",
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              color: "var(--text)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+            }}
             onClick={closeLightbox}
+            aria-label="Close modal"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            <svg className="icon" viewBox="0 0 24 24" style={{ width: "20px", height: "20px" }}>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
 
-          {/* Navigation */}
+          {/* Nav arrows */}
           {gallery.length > 1 && (
             <>
-              <button 
-                className="absolute left-8 top-1/2 -translate-y-1/2 z-[110] p-4 rounded-full bg-[#141714] border border-[#222822] text-[#9aaa9a] hover:text-[#a8e600] hover:border-[#a8e600] transition-all active:scale-75 hidden md:flex items-center justify-center"
+              <button
+                style={{
+                  position: "absolute",
+                  left: "24px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  zIndex: 1001,
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "50%",
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  color: "var(--text)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
                 onClick={prevImage}
+                aria-label="Previous image"
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polyline points="15 18 9 12 15 6"/>
+                <svg className="icon" viewBox="0 0 24 24" style={{ width: "20px", height: "20px" }}>
+                  <polyline points="15 18 9 12 15 6" />
                 </svg>
               </button>
-              <button 
-                className="absolute right-8 top-1/2 -translate-y-1/2 z-[110] p-4 rounded-full bg-[#141714] border border-[#222822] text-[#9aaa9a] hover:text-[#a8e600] hover:border-[#a8e600] transition-all active:scale-75 hidden md:flex items-center justify-center"
+
+              <button
+                style={{
+                  position: "absolute",
+                  right: "24px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  zIndex: 1001,
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "50%",
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  color: "var(--text)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
                 onClick={nextImage}
+                aria-label="Next image"
               >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polyline points="9 18 15 12 9 6"/>
+                <svg className="icon" viewBox="0 0 24 24" style={{ width: "20px", height: "20px" }}>
+                  <polyline points="9 18 15 12 9 6" />
                 </svg>
               </button>
             </>
           )}
 
-          {/* Large Image Container */}
-          <div 
-            className="relative z-[105] max-w-full max-h-full bg-[#111411] border border-[#222822] p-2 rounded-2xl shadow-[0_0_80px_rgba(168,230,0,0.05)] overflow-hidden animate-in zoom-in-95 duration-300"
+          {/* Image Container */}
+          <div
+            style={{
+              position: "relative",
+              zIndex: 1000,
+              maxWidth: "90vw",
+              maxHeight: "85vh",
+              background: "var(--bg-soft)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius-lg)",
+              padding: "16px",
+              boxShadow: "var(--shadow)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
             onClick={(e) => e.stopPropagation()}
           >
-            <img 
-              src={gallery[selectedIdx]} 
-              alt={`${projectTitle} full screenshot`} 
-              className="max-w-full max-h-[85vh] object-contain rounded-lg" 
+            <img
+              src={gallery[selectedIdx]}
+              alt={`${projectTitle} screenshot`}
+              style={{
+                maxWidth: "100%",
+                maxHeight: "75vh",
+                objectFit: "contain",
+                borderRadius: "var(--radius-md)",
+              }}
             />
-            
-            {/* Image Indicator/Caption */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-[#0b0d0b]/80 border border-[#222822] px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase flex items-center gap-2">
-              <span style={{ color: "#a8e600" }}>{selectedIdx + 1}</span>
-              <span style={{ color: "#6a7a6a" }}>/</span>
-              <span style={{ color: "#9aaa9a" }}>{gallery.length}</span>
+            <div
+              style={{
+                marginTop: "12px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.78rem",
+                color: "var(--text-muted)",
+                display: "flex",
+                gap: "6px",
+              }}
+            >
+              <span style={{ color: "var(--accent)" }}>{selectedIdx + 1}</span> / {gallery.length}
             </div>
           </div>
         </div>

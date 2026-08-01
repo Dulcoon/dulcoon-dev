@@ -1,93 +1,91 @@
+"use client";
+
 import React from "react";
-import Link from "next/link";
 
 const serviceData = [
   {
-    icon: <><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>,
+    icon: (
+      <svg className="icon" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18" />
+      </svg>
+    ),
     title: "Business Website",
-    description: "High-conversion landing pages and corporate sites built for performance, SEO, and aesthetics.",
+    description: "Landing pages and corporate sites built for speed, SEO, and conversion.",
   },
   {
-    icon: <><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></>,
+    icon: (
+      <svg className="icon" viewBox="0 0 24 24">
+        <path d="M8 6L2 12l6 6M16 6l6 6-6 6" />
+      </svg>
+    ),
     title: "Web Application",
-    description: "Scalable full-stack web apps with secure backends, REST APIs, and dynamic user experiences.",
+    description: "Full-stack systems with secure backends and well-documented REST APIs.",
   },
   {
-    icon: <><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></>,
+    icon: (
+      <svg className="icon" viewBox="0 0 24 24">
+        <rect x="6" y="2" width="12" height="20" rx="2" />
+        <path d="M11 18h2" />
+      </svg>
+    ),
     title: "Mobile App Development",
-    description: "Native-feel iOS & Android apps using Flutter with smooth performance and clean UI.",
+    description: "Native-feel iOS & Android apps built with Flutter with high performance.",
   },
   {
-    icon: <><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="11" cy="11" r="2"/></>,
+    icon: (
+      <svg className="icon" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <circle cx="9" cy="10" r="1" />
+        <circle cx="14" cy="8.5" r="1" />
+        <circle cx="16.5" cy="12.5" r="1" />
+        <path d="M12 21a2 2 0 010-4h1a2 2 0 002-2 2 2 0 012-2h1" />
+      </svg>
+    ),
     title: "UI/UX Design",
-    description: "Modern, intuitive interfaces designed around user behavior to maximize engagement and conversions.",
+    description: "Modern interfaces designed around clarity, user engagement, and conversion.",
   },
   {
-    icon: <><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></>,
+    icon: (
+      <svg className="icon" viewBox="0 0 24 24">
+        <circle cx="9" cy="21" r="1" />
+        <circle cx="19" cy="21" r="1" />
+        <path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.6a2 2 0 002-1.6L23 6H6" />
+      </svg>
+    ),
     title: "E-Commerce Solutions",
-    description: "Full online stores with product management, payment integration, and admin dashboards.",
+    description: "Online stores with inventory, payments, and analytics built directly in.",
   },
   {
-    icon: <><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></>,
+    icon: (
+      <svg className="icon" viewBox="0 0 24 24">
+        <path d="M14.7 6.3a4 4 0 01-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 015.4-5.4l-3 3-3-3z" />
+      </svg>
+    ),
     title: "Maintenance & Support",
-    description: "Ongoing technical support, bug fixes, and feature updates to keep your product running smoothly.",
+    description: "Ongoing help after launch, direct access without ticketing hurdles.",
   },
 ];
 
 const Services = () => (
-  <section style={{ padding: "80px 0" }}>
-    <div className="max-w-[1900px] mx-auto px-5 md:px-16 xl:px-24">
-      <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-10 md:gap-16 items-start">
+  <section className="section" id="services">
+    <div className="wrap">
+      <div className="section-head" data-reveal>
+        <span className="section-tag">What I Do</span>
+        <h2 className="section-title">Solutions that drive growth &amp; results.</h2>
+        <p className="section-sub">
+          Six focused capabilities covering everything from a landing page to a full commerce platform.
+        </p>
+      </div>
 
-        {/* Left: Heading */}
-        <div>
-          <span className="section-eyebrow mb-4">What I Do</span>
-          <h2
-            className="font-syne text-3xl md:text-4xl font-extrabold leading-tight mb-4"
-            style={{ letterSpacing: "-1px" }}
-          >
-            Solutions that drive growth &{" "}
-            <span style={{ color: "#a8e600" }}>results.</span>
-          </h2>
-          <p className="text-sm leading-relaxed mb-8" style={{ color: "#9aaa9a" }}>
-            End-to-end digital solutions tailored to your business — from concept and design to deployment and support.
-          </p>
-          <Link href="/services" className="btn-ghost">
-            Explore All Services
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-
-        {/* Right: 2-col on mobile, 3-col on desktop */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-          {serviceData.map(({ icon, title, description }) => (
-            <div
-              key={title}
-              className="card-dark p-5 md:p-7 transition-all duration-250 cursor-default group hover:border-[rgba(168,230,0,0.35)] hover:-translate-y-[3px]"
-              style={{ borderRadius: "12px" }}
-            >
-              {/* Icon box */}
-              <div
-                className="mb-4 flex items-center justify-center transition-colors duration-250"
-                style={{
-                  width: "44px",
-                  height: "44px",
-                  borderRadius: "10px",
-                  border: "1px solid rgba(168,230,0,0.2)",
-                  background: "rgba(168,230,0,0.06)",
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a8e600" strokeWidth="1.8">
-                  {icon}
-                </svg>
-              </div>
-              <h3 className="font-syne text-sm font-bold mb-1.5">{title}</h3>
-              <p className="text-xs leading-relaxed hidden sm:block" style={{ color: "#9aaa9a" }}>{description}</p>
-            </div>
-          ))}
-        </div>
+      <div className="services-grid" data-reveal>
+        {serviceData.map(({ icon, title, description }) => (
+          <div key={title} className="service-card">
+            <div className="service-icon">{icon}</div>
+            <h3>{title}</h3>
+            <p>{description}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
