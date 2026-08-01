@@ -25,12 +25,12 @@ export default async function ProjectDetailPage({
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Navbar />
-      <main style={{ flex: 1, paddingTop: "140px", paddingBottom: "80px" }}>
+      <main style={{ flex: 1, paddingTop: "110px", paddingBottom: "100px" }}>
 
         {/* ── Hero Section ── */}
-        <section className="section wrap" style={{ paddingTop: 0, paddingBottom: "40px" }}>
+        <section className="section wrap project-detail-hero">
           {/* Breadcrumb */}
-          <div style={{ marginBottom: "28px" }} data-reveal>
+          <div style={{ marginBottom: "24px" }} data-reveal>
             <Link
               href="/projects"
               className="btn-ghost"
@@ -50,38 +50,22 @@ export default async function ProjectDetailPage({
             </Link>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "800px" }} data-reveal>
+          <div className="project-detail-head" style={{ display: "flex", flexDirection: "column", gap: "18px", maxWidth: "800px" }} data-reveal>
             {/* Category tag */}
             <span className="badge" style={{ alignSelf: "flex-start" }}>
               {project.category}
             </span>
 
-            <h1
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(2.4rem, 5.5vw, 4.2rem)",
-                fontWeight: 800,
-                letterSpacing: "-0.03em",
-                lineHeight: 1.08,
-                color: "var(--text)",
-              }}
-            >
+            <h1 className="project-detail-title">
               {project.title}
             </h1>
 
-            <p
-              style={{
-                color: "var(--text-muted)",
-                fontSize: "1.1rem",
-                lineHeight: 1.7,
-                maxWidth: "640px",
-              }}
-            >
+            <p className="project-detail-sub">
               {project.shortDescription}
             </p>
 
             {/* Tags row */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "4px" }}>
+            <div className="project-detail-tags" style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "4px" }}>
               {project.tags.map((tag) => (
                 <span key={tag.name} className="badge">
                   {tag.name}
@@ -90,7 +74,7 @@ export default async function ProjectDetailPage({
             </div>
 
             {/* Demo & Action buttons */}
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "12px" }}>
+            <div className="project-detail-actions">
               {project.demoLink ? (
                 <a
                   href={project.demoLink}
@@ -129,6 +113,7 @@ export default async function ProjectDetailPage({
 
           {/* Hero Banner Image */}
           <div
+            className="project-detail-banner"
             data-reveal
             style={{
               marginTop: "48px",
@@ -225,6 +210,7 @@ export default async function ProjectDetailPage({
           {/* Right: Impact metric card */}
           <div data-reveal>
             <div
+              className="project-impact-card"
               style={{
                 border: "1px solid var(--border)",
                 borderRadius: "var(--radius-lg)",
