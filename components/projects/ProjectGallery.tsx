@@ -61,10 +61,10 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ gallery, projectTitle }
         <div
           data-reveal
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-            gap: "24px",
+            display: "flex",
+            flexWrap: "wrap",
             justifyContent: "center",
+            gap: "24px",
           }}
         >
           {gallery.map((img, i) => (
@@ -73,6 +73,8 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ gallery, projectTitle }
               onClick={() => setSelectedIdx(i)}
               className="folio-card"
               style={{
+                flex: "1 1 340px",
+                maxWidth: "540px",
                 cursor: "pointer",
                 borderRadius: "var(--radius-md)",
                 overflow: "hidden",

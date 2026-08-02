@@ -16,9 +16,18 @@ const Footer = () => {
         <div className="foot-grid">
           {/* BRAND */}
           <div className="foot-brand">
-            <Link href="/" className="logo">
-              <span className="logo-dot"></span>
-              dulcoon.dev
+            <Link href="/" className="logo-brand" aria-label="dulcoon.dev homepage">
+              <img
+                src="/logo-putih.png"
+                alt=""
+                className="logo-img logo-img-dark"
+              />
+              <img
+                src="/logo-hitam.png"
+                alt=""
+                className="logo-img logo-img-light"
+              />
+              <span className="logo-text">dulcoon.dev</span>
             </Link>
             <p>
               Full-stack developer &amp; IT solutions studio based in Indonesia, building high-performance products for businesses that want to move fast.

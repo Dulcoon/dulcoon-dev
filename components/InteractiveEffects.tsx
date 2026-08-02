@@ -1,16 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 export default function InteractiveEffects() {
   const pathname = usePathname();
+  const isFirstMount = useRef(true);
 
   useEffect(() => {
-    // Instant scroll to top on route change (prevents smooth scroll from bottom)
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+    // Only scroll to top on actual client-side route navigation, NOT on page refresh
+    if (!isFirstMount.current) {
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      }
     }
+    isFirstMount.current = false;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const hasHover = window.matchMedia("(hover:hover)").matches;
@@ -26,9 +30,21 @@ export default function InteractiveEffects() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
-    // 2. IntersectionObserver for [data-reveal]
-    // Re-query elements on route change so new page elements are observed
+    // 2. IntersectionObserver & immediate viewport check for [data-reveal]
     const revealEls = document.querySelectorAll("[data-reveal]");
+
+    const revealAllInView = () => {
+      revealEls.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        // Reveal elements within or near the current viewport
+        if (rect.top < window.innerHeight + 150 && rect.bottom > -150) {
+          el.classList.add("in-view");
+        }
+      });
+    };
+
+    revealAllInView();
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -38,25 +54,24 @@ export default function InteractiveEffects() {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.01, rootMargin: "100px 0px 100px 0px" }
     );
 
     revealEls.forEach((el) => {
-      // If element is already in viewport on route transition, reveal immediately
       const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
+      if (rect.top < window.innerHeight + 100 && rect.bottom > -100) {
         el.classList.add("in-view");
       } else {
         io.observe(el);
       }
     });
 
-    // Fallback: reveal any remaining hidden elements after 1s to prevent invisible page bugs
+    // Fallback: reveal all hidden data-reveal elements after 300ms to guarantee zero blank pages
     const fallbackTimer = setTimeout(() => {
-      document.querySelectorAll("[data-reveal]:not(.in-view)").forEach((el) => {
+      document.querySelectorAll("[data-reveal]").forEach((el) => {
         el.classList.add("in-view");
       });
-    }, 1000);
+    }, 300);
 
     // 3. Hero Entrance stagger trigger
     const heroStagger = document.getElementById("heroStagger");
@@ -92,21 +107,32 @@ export default function InteractiveEffects() {
       });
     }
 
-    // 5. 3D tilt on interactive cards
+    // 5. 3D Holographic Parallax Card Tilt & Specular Light Sheen
     const tiltCleanups: Array<() => void> = [];
     if (hasHover && !reduceMotion) {
-      const tiltCards = document.querySelectorAll<HTMLElement>(".folio-card, .test-card, .price-card, .service-card");
+      const tiltCards = document.querySelectorAll<HTMLElement>(
+        ".folio-card, .test-card, .price-card, .service-card, .project-card"
+      );
       tiltCards.forEach((card) => {
         const handleMouseMove = (e: MouseEvent) => {
           const r = card.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width - 0.5;
-          const py = (e.clientY - r.top) / r.height - 0.5;
-          card.style.transition = "transform .12s linear";
-          card.style.transform = `perspective(800px) rotateX(${(-py * 5).toFixed(2)}deg) rotateY(${(px * 5).toFixed(2)}deg) translateY(-4px)`;
+          const px = (e.clientX - r.left) / r.width;
+          const py = (e.clientY - r.top) / r.height;
+
+          const rotateX = ((py - 0.5) * -12).toFixed(2);
+          const rotateY = ((px - 0.5) * 12).toFixed(2);
+
+          card.style.setProperty("--mx", `${(px * 100).toFixed(1)}%`);
+          card.style.setProperty("--my", `${(py * 100).toFixed(1)}%`);
+          card.style.transition = "transform .08s linear";
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         };
+
         const handleMouseLeave = () => {
           card.style.transition = "transform .5s var(--ease)";
-          card.style.transform = "";
+          card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+          card.style.setProperty("--mx", "50%");
+          card.style.setProperty("--my", "50%");
         };
 
         card.addEventListener("mousemove", handleMouseMove);

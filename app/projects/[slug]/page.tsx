@@ -283,8 +283,9 @@ export default async function ProjectDetailPage({
             </div>
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
                 gap: "20px",
               }}
               data-reveal
@@ -293,6 +294,8 @@ export default async function ProjectDetailPage({
                 <div
                   key={feat.title}
                   style={{
+                    flex: "1 1 300px",
+                    maxWidth: "360px",
                     background: "var(--bg-soft)",
                     border: "1px solid var(--border)",
                     borderRadius: "var(--radius-md)",

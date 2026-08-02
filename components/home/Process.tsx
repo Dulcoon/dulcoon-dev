@@ -111,6 +111,10 @@ const Process = () => {
       setActiveIdx(calculatedIndex);
     };
 
+    if (containerRef.current) {
+      containerRef.current.querySelectorAll("[data-reveal]").forEach((el) => el.classList.add("in-view"));
+    }
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll(); // Initial position check
 
@@ -137,7 +141,7 @@ const Process = () => {
       <div className="process-sticky-wrapper">
         <div className="wrap">
           {/* Section Header */}
-          <div className="section-head" style={{ marginBottom: "28px" }} data-reveal>
+          <div className="section-head" style={{ textAlign: "center", marginBottom: "28px" }} data-reveal>
             <span className="section-tag">How It Works</span>
             <h2 className="section-title">A process built for clarity.</h2>
             <p className="section-sub">
