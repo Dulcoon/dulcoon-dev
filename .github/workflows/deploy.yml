@@ -1,32 +1,22 @@
-name: Test VPS Connection
+name: Deploy dulcoon-dev
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  test:
+  deploy:
+    name: Deploy to VPS
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test SSH connection
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
-            echo "======================================"
-            echo " GitHub Actions connected to VPS"
-            echo "======================================"
-
-            node --version
-            npm --version
-            pm2 --version
-
-            hostname
-            whoami
-            uptime
-            pm2 status
+            cd /var/www/dulcoon-dev
+            ./deploy-server.sh
