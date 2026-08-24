@@ -7,8 +7,9 @@ const trustedClients = [
   "Holiday Bali Villa",
   "PaulusConnect",
   "StriveToHigh",
-  "LuxStay Bali",
-  "CloudScale",
+  "MarmeVillaJogja",
+  "ViCore System",
+  "Temani App",
 ];
 
 const TrustedBy = () => {
