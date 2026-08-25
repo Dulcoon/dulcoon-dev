@@ -130,6 +130,9 @@ export const metadata: Metadata = {
   appleWebApp: {
     title: "dulcoon.dev",
   },
+  verification: {
+    google: "google51ae9e87770c6bb5",
+  },
 };
 
 const jsonLd = {
