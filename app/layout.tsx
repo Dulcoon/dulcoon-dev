@@ -1,39 +1,9 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
-import { execSync } from "child_process";
-import fs from "fs";
-import path from "path";
 import InteractiveEffects from "@/components/InteractiveEffects";
 import ThreeCanvas from "@/components/ThreeCanvas";
 import CursorSpotlight from "@/components/CursorSpotlight";
-
-// Execute image conversion on dev mount
-if (process.env.NODE_ENV === "development") {
-  const sourceImage = "/home/dulcoon/.gemini/antigravity/brain/26d1eaa8-2959-45bc-bd4b-9fe781f63a27/favicon_source_1779525449513.png";
-  const publicDir = path.join(process.cwd(), "public");
-  const appDir = path.join(process.cwd(), "app");
-  const lockFile = path.join(process.cwd(), ".favicon_generated");
-
-  if (!fs.existsSync(lockFile) && fs.existsSync(sourceImage)) {
-    try {
-      if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
-      fs.copyFileSync(sourceImage, path.join(publicDir, 'favicon.png'));
-      execSync(`convert "${sourceImage}" -resize 32x32 "${path.join(appDir, 'favicon.ico')}"`);
-      execSync(`convert "${sourceImage}" -resize 32x32 "${path.join(publicDir, 'favicon.ico')}"`);
-      execSync(`convert "${sourceImage}" -resize 512x512 "${path.join(appDir, 'icon.png')}"`);
-      execSync(`convert "${sourceImage}" -resize 180x180 "${path.join(appDir, 'apple-icon.png')}"`);
-      execSync(`convert "${sourceImage}" -resize 96x96 "${path.join(publicDir, 'favicon-96x96.png')}"`);
-      execSync(`convert "${sourceImage}" -resize 180x180 "${path.join(publicDir, 'apple-touch-icon.png')}"`);
-      execSync(`convert "${sourceImage}" -resize 192x192 "${path.join(publicDir, 'web-app-manifest-192x192.png')}"`);
-      execSync(`convert "${sourceImage}" -resize 512x512 "${path.join(publicDir, 'web-app-manifest-512x512.png')}"`);
-      fs.writeFileSync(lockFile, "done");
-      console.log("=== FAVICONS GENERATED SUCCESSFULLY ===");
-    } catch (e) {
-      console.error("Error generating favicons:", e);
-    }
-  }
-}
 
 const syne = Syne({
   variable: "--font-syne",
@@ -120,11 +90,16 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-light.png", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon-dark.png", media: "(prefers-color-scheme: dark)" },
       { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.ico" },
     ],
     shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   manifest: "/site.webmanifest",
   appleWebApp: {
