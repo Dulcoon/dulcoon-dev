@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import type { ProjectData } from "@/lib/projects";
 
 const defaultProjects = [
@@ -35,10 +36,12 @@ const Portfolio = ({ projects }: { projects?: ProjectData[] }) => {
                 >
                   <div className="folio-thumb">
                     {project.heroImage && (
-                      <img
+                      <Image
                         src={project.heroImage}
                         alt={project.title}
-                        className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover"
                       />
                     )}
                   </div>

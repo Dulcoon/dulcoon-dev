@@ -17,7 +17,7 @@ const Expertise = () => {
               <span className="material-symbols-outlined text-primary">terminal</span>
             </div>
             <div>
-              <h4 className="font-bold">Web Development</h4>
+              <h3 className="font-bold">Web Development</h3>
               <p className="text-on-surface-variant text-sm">Next-gen web apps using React, Next.js, and Laravel.</p>
             </div>
           </div>
@@ -26,7 +26,7 @@ const Expertise = () => {
               <span className="material-symbols-outlined text-secondary">smartphone</span>
             </div>
             <div>
-              <h4 className="font-bold">Mobile Apps</h4>
+              <h3 className="font-bold">Mobile Apps</h3>
               <p className="text-on-surface-variant text-sm">Native-feel cross-platform experiences with Flutter.</p>
             </div>
           </div>
@@ -35,7 +35,7 @@ const Expertise = () => {
               <span className="material-symbols-outlined text-tertiary">database</span>
             </div>
             <div>
-              <h4 className="font-bold">System Architecture</h4>
+              <h3 className="font-bold">System Architecture</h3>
               <p className="text-on-surface-variant text-sm">Robust backends and complex API integrations.</p>
             </div>
           </div>

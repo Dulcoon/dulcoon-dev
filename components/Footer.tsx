@@ -19,12 +19,16 @@ const Footer = () => {
             <Link href="/" className="logo-brand" aria-label="dulcoon.dev homepage">
               <img
                 src="/logo-putih.png"
-                alt=""
+                alt="dulcoon.dev logo"
+                width={36}
+                height={36}
                 className="logo-img logo-img-dark"
               />
               <img
                 src="/logo-hitam.png"
-                alt=""
+                alt="dulcoon.dev logo"
+                width={36}
+                height={36}
                 className="logo-img logo-img-light"
               />
               <span className="logo-text">dulcoon.dev</span>
@@ -36,7 +40,7 @@ const Footer = () => {
 
           {/* QUICK LINKS */}
           <div className="foot-col">
-            <h4>Quick Links</h4>
+            <h3 className="foot-col-title">Quick Links</h3>
             <Link href={isHome ? "#home" : "/"}>Home</Link>
             <Link href={isHome ? "#services" : "/services"}>Services</Link>
             <Link href={isHome ? "#projects" : "/projects"}>Projects</Link>
@@ -45,7 +49,7 @@ const Footer = () => {
 
           {/* CONTACT */}
           <div className="foot-col">
-            <h4>Contact</h4>
+            <h3 className="foot-col-title">Contact</h3>
             <a href="mailto:dulcoon.dev@gmail.com">dulcoon.dev@gmail.com</a>
             <a href="https://wa.me/6282253400079" target="_blank" rel="noopener noreferrer">
               +62 822-5340-0079
