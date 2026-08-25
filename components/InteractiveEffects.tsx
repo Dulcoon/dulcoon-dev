@@ -24,26 +24,15 @@ export default function InteractiveEffects() {
     const handleScroll = () => {
       if (!progressBar) return;
       const h = document.documentElement;
-      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      const total = h.scrollHeight - h.clientHeight;
+      const pct = total > 0 ? (h.scrollTop / total) * 100 : 0;
       progressBar.style.width = Math.min(100, Math.max(0, pct)) + "%";
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
-    // 2. IntersectionObserver & immediate viewport check for [data-reveal]
-    const revealEls = document.querySelectorAll("[data-reveal]");
-
-    const revealAllInView = () => {
-      revealEls.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        // Reveal elements within or near the current viewport
-        if (rect.top < window.innerHeight + 150 && rect.bottom > -150) {
-          el.classList.add("in-view");
-        }
-      });
-    };
-
-    revealAllInView();
+    // 2. Continuous & Mutation-Aware IntersectionObserver for [data-reveal]
+    const observedElements = new WeakSet<Element>();
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -54,38 +43,39 @@ export default function InteractiveEffects() {
           }
         });
       },
-      { threshold: 0.01, rootMargin: "100px 0px 100px 0px" }
+      { threshold: 0.01, rootMargin: "150px 0px 150px 0px" }
     );
 
-    revealEls.forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight + 100 && rect.bottom > -100) {
-        el.classList.add("in-view");
-      } else {
-        io.observe(el);
-      }
-    });
+    const checkAndObserveReveals = () => {
+      const revealEls = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      revealEls.forEach((el) => {
+        if (el.classList.contains("in-view")) return;
 
-    // Fallback: reveal all hidden data-reveal elements after 300ms to guarantee zero blank pages
-    const fallbackTimer = setTimeout(() => {
-      document.querySelectorAll("[data-reveal]").forEach((el) => {
-        el.classList.add("in-view");
+        const rect = el.getBoundingClientRect();
+        // If element is already in or near viewport, reveal immediately
+        if (rect.top < window.innerHeight + 200 && rect.bottom > -200) {
+          el.classList.add("in-view");
+        } else if (!observedElements.has(el)) {
+          observedElements.add(el);
+          io.observe(el);
+        }
       });
-    }, 300);
+    };
 
-    // 3. Hero Entrance stagger trigger
-    const heroStagger = document.getElementById("heroStagger");
-    if (heroStagger) {
-      requestAnimationFrame(() => {
-        setTimeout(() => heroStagger.classList.add("stagger-in"), 80);
-      });
-    }
+    // Run immediate check
+    checkAndObserveReveals();
 
-    // 4. Magnetic buttons
+    // 3. Magnetic buttons binder
+    const boundMagnetics = new WeakSet<HTMLElement>();
     const magneticCleanups: Array<() => void> = [];
-    if (hasHover && !reduceMotion) {
+
+    const bindMagneticButtons = () => {
+      if (!hasHover || reduceMotion) return;
       const magneticBtns = document.querySelectorAll<HTMLElement>(".btn-primary, .btn-ghost, .magnetic");
       magneticBtns.forEach((btn) => {
+        if (boundMagnetics.has(btn)) return;
+        boundMagnetics.add(btn);
+
         const handleMouseMove = (e: MouseEvent) => {
           const r = btn.getBoundingClientRect();
           const x = (e.clientX - r.left - r.width / 2) * 0.25;
@@ -105,15 +95,23 @@ export default function InteractiveEffects() {
           btn.removeEventListener("mouseleave", handleMouseLeave);
         });
       });
-    }
+    };
 
-    // 5. 3D Holographic Parallax Card Tilt & Specular Light Sheen
+    bindMagneticButtons();
+
+    // 4. 3D Holographic Parallax Card Tilt & Specular Light Sheen
+    const boundTiltCards = new WeakSet<HTMLElement>();
     const tiltCleanups: Array<() => void> = [];
-    if (hasHover && !reduceMotion) {
+
+    const bindTiltCards = () => {
+      if (!hasHover || reduceMotion) return;
       const tiltCards = document.querySelectorAll<HTMLElement>(
         ".folio-card, .test-card, .price-card, .service-card, .project-card"
       );
       tiltCards.forEach((card) => {
+        if (boundTiltCards.has(card)) return;
+        boundTiltCards.add(card);
+
         const handleMouseMove = (e: MouseEvent) => {
           const r = card.getBoundingClientRect();
           const px = (e.clientX - r.left) / r.width;
@@ -142,10 +140,12 @@ export default function InteractiveEffects() {
           card.removeEventListener("mouseleave", handleMouseLeave);
         });
       });
-    }
+    };
 
-    // 6. Count-up numbers on pricing cards
-    const countEls = document.querySelectorAll<HTMLElement>(".count-up");
+    bindTiltCards();
+
+    // 5. Count-up numbers
+    const boundCountEls = new WeakSet<HTMLElement>();
     const countIO = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -169,11 +169,55 @@ export default function InteractiveEffects() {
       },
       { threshold: 0.3 }
     );
-    countEls.forEach((el) => countIO.observe(el));
+
+    const bindCountUp = () => {
+      const countEls = document.querySelectorAll<HTMLElement>(".count-up");
+      countEls.forEach((el) => {
+        if (!boundCountEls.has(el)) {
+          boundCountEls.add(el);
+          countIO.observe(el);
+        }
+      });
+    };
+
+    bindCountUp();
+
+    // 6. MutationObserver to handle Async / Dynamic Route Changes & Streaming RSC
+    const mo = new MutationObserver(() => {
+      checkAndObserveReveals();
+      bindMagneticButtons();
+      bindTiltCards();
+      bindCountUp();
+    });
+
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    // Staggered interval safety passes for async Next.js Server Components
+    const timers = [
+      setTimeout(checkAndObserveReveals, 50),
+      setTimeout(checkAndObserveReveals, 150),
+      setTimeout(checkAndObserveReveals, 350),
+      setTimeout(checkAndObserveReveals, 700),
+      setTimeout(() => {
+        // Guarantee all remaining data-reveal elements become visible
+        document.querySelectorAll("[data-reveal]:not(.in-view)").forEach((el) => {
+          el.classList.add("in-view");
+        });
+      }, 1000),
+    ];
+
+    // 7. Hero Entrance stagger trigger
+    const heroStagger = document.getElementById("heroStagger");
+    if (heroStagger) {
+      requestAnimationFrame(() => {
+        setTimeout(() => heroStagger.classList.add("stagger-in"), 80);
+      });
+    }
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      clearTimeout(fallbackTimer);
+      timers.forEach((t) => clearTimeout(t));
+      mo.disconnect();
       io.disconnect();
       countIO.disconnect();
       magneticCleanups.forEach((fn) => fn());

@@ -1,5 +1,17 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://dulcoon-project-management.vercel.app";
-const PROJECTS_API = `${API_URL}/api/projects`;
+const API_URL =
+  process.env.PROJECTS_API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "";
+const API_KEY = process.env.PROJECTS_API_KEY || "";
+const PROJECTS_API = API_URL ? `${API_URL}/api/projects` : "";
+
+function getHeaders(): HeadersInit {
+  const headers: Record<string, string> = {};
+  if (API_KEY) {
+    headers["x-api-key"] = API_KEY;
+  }
+  return headers;
+}
 
 export interface ProjectFeature {
   icon: string;
@@ -77,9 +89,14 @@ function mapApiProject(p: ApiProject): ProjectData {
 }
 
 export async function getProjectsData(): Promise<ProjectData[]> {
+  if (!PROJECTS_API) {
+    console.warn("PROJECTS_API_URL is not configured in environment variables.");
+    return [];
+  }
   try {
     const res = await fetch(PROJECTS_API, {
-      next: { revalidate: 300 },
+      headers: getHeaders(),
+      next: { revalidate: 3600 },
     });
     if (!res.ok) throw new Error(`API returned ${res.status}`);
     const json = await res.json();
@@ -90,14 +107,22 @@ export async function getProjectsData(): Promise<ProjectData[]> {
   }
 }
 
+// Alias for convenience / compatibility
+export const getProjects = getProjectsData;
+
 export async function getProjectBySlug(slug: string): Promise<ProjectData | null> {
+  if (!PROJECTS_API) {
+    console.warn("PROJECTS_API_URL is not configured in environment variables.");
+    return null;
+  }
   try {
     const res = await fetch(`${PROJECTS_API}/${slug}`, {
-      next: { revalidate: 300 },
+      headers: getHeaders(),
+      next: { revalidate: 3600 },
     });
     if (!res.ok) return null;
     const json = await res.json();
-    return mapApiProject(json.data);
+    return json.data ? mapApiProject(json.data) : null;
   } catch {
     return null;
   }
