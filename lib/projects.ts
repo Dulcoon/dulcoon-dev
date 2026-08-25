@@ -88,6 +88,8 @@ function mapApiProject(p: ApiProject): ProjectData {
   };
 }
 
+const REVALIDATE_TIME = process.env.NODE_ENV === "development" ? 0 : 60;
+
 export async function getProjectsData(): Promise<ProjectData[]> {
   if (!PROJECTS_API) {
     console.warn("[Projects API] PROJECTS_API_URL is not configured in environment variables.");
@@ -96,7 +98,7 @@ export async function getProjectsData(): Promise<ProjectData[]> {
   try {
     const res = await fetch(PROJECTS_API, {
       headers: getHeaders(),
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_TIME, tags: ["projects"] },
     });
     if (!res.ok) {
       const errorText = await res.text().catch(() => "");
@@ -122,7 +124,7 @@ export async function getProjectBySlug(slug: string): Promise<ProjectData | null
   try {
     const res = await fetch(`${PROJECTS_API}/${slug}`, {
       headers: getHeaders(),
-      next: { revalidate: 3600 },
+      next: { revalidate: REVALIDATE_TIME, tags: [`project-${slug}`] },
     });
     if (!res.ok) {
       const errorText = await res.text().catch(() => "");
