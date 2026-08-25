@@ -79,6 +79,29 @@ const Portfolio = ({ projects }: { projects?: ProjectData[] }) => {
                 </Link>
               ))}
         </div>
+
+        {/* View All Projects Shortcut */}
+        <div data-reveal style={{ marginTop: "48px", display: "flex", justifyContent: "center" }}>
+          <Link
+            href="/projects"
+            className="btn btn-ghost"
+            style={{
+              padding: "14px 32px",
+              fontSize: "0.95rem",
+              gap: "10px",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <span>View All Projects</span>
+            <svg
+              className="icon"
+              viewBox="0 0 24 24"
+              style={{ width: "18px", height: "18px", transition: "transform 0.25s ease" }}
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </Link>
+        </div>
       </div>
     </section>
   );
