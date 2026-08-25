@@ -54,21 +54,154 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://dulcoon-dev.web.id";
+
 export const metadata: Metadata = {
-  title: "dulcoon.dev — Your Digital Success Partner",
-  description: "I build high-performance web apps, mobile apps, and custom IT solutions that help businesses grow in the digital era. Based in Indonesia.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "dulcoon.dev — Your Digital Success Partner",
+    template: "%s | dulcoon.dev",
+  },
+  description:
+    "Expert Software Engineering & Digital Solutions. I build high-performance web applications, mobile apps, and custom IT systems that help businesses scale globally.",
+  keywords: [
+    "Software Developer Indonesia",
+    "Web Development",
+    "Mobile App Development",
+    "Next.js Specialist",
+    "Flutter App Developer",
+    "Full Stack Software Engineer",
+    "dulcoon.dev",
+    "Custom IT Solutions",
+    "Jasa Pembuatan Website",
+    "Jasa Pembuatan Aplikasi Mobile",
+    "Enterprise Web Applications",
+  ],
+  authors: [{ name: "Dulcoon", url: siteUrl }],
+  creator: "Dulcoon",
+  publisher: "dulcoon.dev",
+  alternates: {
+    canonical: siteUrl,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: "dulcoon.dev",
+    title: "dulcoon.dev — Your Digital Success Partner",
+    description:
+      "Expert Software Engineering & Digital Solutions. High-performance web apps, mobile apps, and custom IT systems engineered for real business growth.",
+    images: [
+      {
+        url: "/logo-putih.png",
+        width: 800,
+        height: 800,
+        alt: "dulcoon.dev logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "dulcoon.dev — Your Digital Success Partner",
+    description:
+      "Expert Software Engineering & Digital Solutions. Web applications, cross-platform mobile apps, and scalable digital infrastructure.",
+    images: ["/logo-putih.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: "/favicon.ico" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
     ],
-    shortcut: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
-  manifest: '/site.webmanifest',
+  manifest: "/site.webmanifest",
   appleWebApp: {
-    title: 'dulcoon.dev',
+    title: "dulcoon.dev",
   },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "dulcoon.dev",
+      description: "Expert Software Engineering & Digital Solutions Partner",
+      publisher: { "@id": `${siteUrl}/#organization` },
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${siteUrl}/#organization`,
+      name: "dulcoon.dev",
+      url: siteUrl,
+      logo: `${siteUrl}/logo-hitam.png`,
+      image: `${siteUrl}/logo-hitam.png`,
+      description:
+        "High-performance web development, mobile applications, and enterprise IT solutions provider based in Indonesia.",
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "ID",
+      },
+      priceRange: "$$",
+      knowsAbout: [
+        "Web Application Development",
+        "Mobile App Development",
+        "Next.js",
+        "React",
+        "Flutter",
+        "Cloud Infrastructure",
+        "UI/UX Design & Engineering",
+        "REST API Architecture",
+      ],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Software Engineering Services",
+        itemListElement: [
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Custom Web Application Development",
+              description:
+                "Modern, responsive web applications built with Next.js, React, and scalable cloud infrastructure.",
+            },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Cross-Platform Mobile App Development",
+              description:
+                "High-performance iOS and Android mobile apps engineered with Flutter and native device capabilities.",
+            },
+          },
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: "Enterprise IT Solutions & Custom Systems",
+              description:
+                "Custom business workflows, booking platforms, and automated backend infrastructure.",
+            },
+          },
+        ],
+      },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -88,6 +221,10 @@ export default function RootLayout({
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <script
           dangerouslySetInnerHTML={{

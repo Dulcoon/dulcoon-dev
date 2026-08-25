@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
@@ -11,6 +12,58 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
+  if (!project) {
+    return {
+      title: "Project Not Found",
+    };
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://dulcoon-dev.web.id";
+  const projectUrl = `${siteUrl}/projects/${project.slug}`;
+  const metaTitle = `${project.title} — Case Study & Architecture`;
+  const metaDesc =
+    project.shortDescription ||
+    `Detailed case study of ${project.title}: built with ${project.techStack.join(", ")}. Explore features, technical architecture, and impact metrics.`;
+
+  return {
+    title: metaTitle,
+    description: metaDesc,
+    keywords: [
+      project.title,
+      project.category,
+      ...project.techStack,
+      "Case Study",
+      "Software Architecture",
+      "dulcoon.dev",
+    ],
+    alternates: {
+      canonical: projectUrl,
+    },
+    openGraph: {
+      type: "article",
+      title: `${project.title} | dulcoon.dev`,
+      description: metaDesc,
+      url: projectUrl,
+      images: project.heroImage
+        ? [{ url: project.heroImage, alt: `${project.title} showcase` }]
+        : [{ url: "/logo-putih.png" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} | dulcoon.dev`,
+      description: metaDesc,
+      images: project.heroImage ? [project.heroImage] : ["/logo-putih.png"],
+    },
+  };
+}
+
 export default async function ProjectDetailPage({
   params,
 }: {
@@ -20,10 +73,38 @@ export default async function ProjectDetailPage({
   const project = await getProjectBySlug(slug);
   if (!project) return notFound();
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://dulcoon-dev.web.id";
+  const projectSchema = {
+    "@context": "https://schema.org",
+    "@type": project.category === "Mobile App" ? "SoftwareApplication" : "WebApplication",
+    name: project.title,
+    url: `${siteUrl}/projects/${project.slug}`,
+    description: project.shortDescription,
+    applicationCategory: project.category,
+    operatingSystem: project.category === "Mobile App" ? "Android, iOS" : "All Web Browsers",
+    softwareRequirements: project.techStack.join(", "),
+    image: project.heroImage,
+    screenshot: project.gallery,
+    author: {
+      "@type": "Person",
+      name: "Dulcoon",
+      url: siteUrl,
+    },
+    creator: {
+      "@type": "Organization",
+      name: "dulcoon.dev",
+      url: siteUrl,
+    },
+  };
+
   const whatsappUrl = `https://wa.me/6282253400079?text=Halo%2C%20saya%20tertarik%20dengan%20layanan%20serupa%20untuk%20proyek%20${encodeURIComponent(project.title)}.`;
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema) }}
+      />
       <Navbar />
       <main style={{ flex: 1, paddingTop: "110px", paddingBottom: "100px" }}>
 
