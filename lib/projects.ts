@@ -90,7 +90,7 @@ function mapApiProject(p: ApiProject): ProjectData {
 
 export async function getProjectsData(): Promise<ProjectData[]> {
   if (!PROJECTS_API) {
-    console.warn("PROJECTS_API_URL is not configured in environment variables.");
+    console.warn("[Projects API] PROJECTS_API_URL is not configured in environment variables.");
     return [];
   }
   try {
@@ -98,11 +98,15 @@ export async function getProjectsData(): Promise<ProjectData[]> {
       headers: getHeaders(),
       next: { revalidate: 3600 },
     });
-    if (!res.ok) throw new Error(`API returned ${res.status}`);
+    if (!res.ok) {
+      const errorText = await res.text().catch(() => "");
+      console.error(`[Projects API] Fetch failed with status ${res.status}: ${res.statusText}`, errorText);
+      return [];
+    }
     const json = await res.json();
     return (json.data || []).map(mapApiProject);
   } catch (e) {
-    console.error("Failed to fetch projects:", e);
+    console.error("[Projects API] Network/Server Error fetching projects:", e);
     return [];
   }
 }
@@ -112,7 +116,7 @@ export const getProjects = getProjectsData;
 
 export async function getProjectBySlug(slug: string): Promise<ProjectData | null> {
   if (!PROJECTS_API) {
-    console.warn("PROJECTS_API_URL is not configured in environment variables.");
+    console.warn("[Projects API] PROJECTS_API_URL is not configured in environment variables.");
     return null;
   }
   try {
@@ -120,10 +124,15 @@ export async function getProjectBySlug(slug: string): Promise<ProjectData | null
       headers: getHeaders(),
       next: { revalidate: 3600 },
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      const errorText = await res.text().catch(() => "");
+      console.error(`[Projects API] Fetch slug "${slug}" failed with status ${res.status}: ${res.statusText}`, errorText);
+      return null;
+    }
     const json = await res.json();
     return json.data ? mapApiProject(json.data) : null;
-  } catch {
+  } catch (e) {
+    console.error(`[Projects API] Network/Server Error fetching slug "${slug}":`, e);
     return null;
   }
 }
