@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description:
       "Get in touch with dulcoon.dev for high-performance web development, mobile applications, or custom IT engineering inquiries.",
     url: `${siteUrl}/contact`,
-    images: ["/logo-putih.png"],
+    images: ["/og-image-new.png"],
   },
 };
 

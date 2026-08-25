@@ -74,10 +74,10 @@ export const metadata: Metadata = {
       "Expert Software Engineering & Digital Solutions. High-performance web apps, mobile apps, and custom IT systems engineered for real business growth.",
     images: [
       {
-        url: "/logo-putih.png",
-        width: 800,
-        height: 800,
-        alt: "dulcoon.dev logo",
+        url: "/og-image-new.png",
+        width: 1611,
+        height: 748,
+        alt: "dulcoon.dev — Your Digital Success Partner",
       },
     ],
   },
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     title: "dulcoon.dev — Your Digital Success Partner",
     description:
       "Expert Software Engineering & Digital Solutions. Web applications, cross-platform mobile apps, and scalable digital infrastructure.",
-    images: ["/logo-putih.png"],
+    images: ["/og-image-new.png"],
   },
   robots: {
     index: true,

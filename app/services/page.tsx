@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description:
       'Comprehensive software engineering services: full-stack web applications, cross-platform mobile apps, cloud infrastructure, and enterprise IT consulting.',
     url: `${siteUrl}/services`,
-    images: ['/logo-putih.png'],
+    images: ['/og-image-new.png'],
   },
 };
 

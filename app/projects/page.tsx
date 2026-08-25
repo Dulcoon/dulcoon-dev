@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     description:
       'Explore production-grade web applications, cross-platform mobile apps, and enterprise IT platforms engineered by dulcoon.dev.',
     url: `${siteUrl}/projects`,
-    images: ['/logo-putih.png'],
+    images: ['/og-image-new.png'],
   },
 };
 
