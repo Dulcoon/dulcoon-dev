@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Syne, DM_Sans, Space_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import InteractiveEffects from "@/components/InteractiveEffects";
-import ThreeCanvas from "@/components/ThreeCanvas";
+import ThreeCanvasWrapper from "@/components/ThreeCanvasWrapper";
 import CursorSpotlight from "@/components/CursorSpotlight";
 
 const poppins = Poppins({
@@ -201,11 +201,14 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning className="h-full">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* Material Symbols: loaded non-blocking via media=print trick */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+          media="print"
+          // @ts-expect-error onload is valid HTML attribute for non-blocking font loading
+          onLoad="this.media='all'"
         />
         <script
           type="application/ld+json"
@@ -229,7 +232,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${poppins.variable} ${syne.variable} ${dmSans.variable} ${spaceMono.variable} antialiased min-h-screen relative`}
       >
-        <ThreeCanvas />
+        <ThreeCanvasWrapper />
         <CursorSpotlight />
         <div className="scroll-progress" id="scrollProgress" />
         <InteractiveEffects />
