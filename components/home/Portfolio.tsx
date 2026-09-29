@@ -40,13 +40,13 @@ const Portfolio = ({ projects }: { projects?: ProjectData[] }) => {
                         src={project.heroImage}
                         alt={project.title}
                         fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover"
                       />
                     )}
                   </div>
                   <div className="folio-body">
-                    <div>
+                    <div className="folio-body-content">
                       <span className="folio-tag">{project.category}</span>
                       <h3>{project.title}</h3>
                     </div>
@@ -66,7 +66,7 @@ const Portfolio = ({ projects }: { projects?: ProjectData[] }) => {
                 >
                   <div className="folio-thumb"></div>
                   <div className="folio-body">
-                    <div>
+                    <div className="folio-body-content">
                       <span className="folio-tag">{p.category}</span>
                       <h3>{p.title}</h3>
                     </div>

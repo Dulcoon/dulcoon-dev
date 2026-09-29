@@ -1,4 +1,5 @@
 import React from "react";
+import DynamicIcon from "@/components/ui/DynamicIcon";
 
 const Expertise = () => {
   return (
@@ -14,7 +15,7 @@ const Expertise = () => {
         <div className="space-y-6">
           <div className="flex items-start gap-4">
             <div className="p-3 bg-primary/10 rounded-lg">
-              <span className="material-symbols-outlined text-primary">terminal</span>
+              <DynamicIcon name="terminal" size={24} className="text-primary" />
             </div>
             <div>
               <h3 className="font-bold">Web Development</h3>
@@ -23,7 +24,7 @@ const Expertise = () => {
           </div>
           <div className="flex items-start gap-4">
             <div className="p-3 bg-secondary/10 rounded-lg">
-              <span className="material-symbols-outlined text-secondary">smartphone</span>
+              <DynamicIcon name="smartphone" size={24} className="text-secondary" />
             </div>
             <div>
               <h3 className="font-bold">Mobile Apps</h3>
@@ -32,7 +33,7 @@ const Expertise = () => {
           </div>
           <div className="flex items-start gap-4">
             <div className="p-3 bg-tertiary/10 rounded-lg">
-              <span className="material-symbols-outlined text-tertiary">database</span>
+              <DynamicIcon name="database" size={24} className="text-tertiary" />
             </div>
             <div>
               <h3 className="font-bold">System Architecture</h3>

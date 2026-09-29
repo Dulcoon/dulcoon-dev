@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProjectGallery from "@/components/projects/ProjectGallery";
+import DynamicIcon from "@/components/ui/DynamicIcon";
 import { getProjectBySlug, getAllProjectSlugs } from "@/lib/projects";
 
 export async function generateStaticParams() {
@@ -399,18 +400,10 @@ export default async function ProjectDetailPage({
                       alignItems: "center",
                       justifyContent: "center",
                       color: "var(--accent)",
+                      flexShrink: 0,
                     }}
                   >
-                    <span
-                      className="material-symbols-outlined"
-                      style={{
-                        fontSize: "26px",
-                        color: "var(--accent)",
-                        fontVariationSettings: "'FILL' 1",
-                      }}
-                    >
-                      {feat.icon}
-                    </span>
+                    <DynamicIcon name={feat.icon} size={24} style={{ color: "var(--accent)" }} />
                   </div>
                   <h3
                     style={{
