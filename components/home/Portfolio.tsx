@@ -6,14 +6,42 @@ import Image from "next/image";
 import type { ProjectData } from "@/lib/projects";
 
 const defaultProjects = [
-  { slug: "luxstay-bali", title: "LuxStay Bali", category: "Booking System", image: "" },
-  { slug: "homeliving-store", title: "HomeLiving Store", category: "E-Commerce", image: "" },
-  { slug: "paulusconnect", title: "PaulusConnect", category: "Mobile App", image: "" },
-  { slug: "cloudscale", title: "CloudScale", category: "Corporate Website", image: "" },
+  {
+    slug: "marme-villa-jogja",
+    title: "Marme Villa Jogja Booking System",
+    category: "Website",
+    shortDescription: "Direct villa reservation platform with automated availability, dynamic pricing, and Midtrans payment integration.",
+    techStack: ["React", "Laravel", "MySQL"],
+    heroImage: "",
+  },
+  {
+    slug: "temani-app",
+    title: "TEMANI APP - Ai Companion for Scam Detection",
+    category: "Website",
+    shortDescription: "Intelligent scam detection platform with real-time text analysis, fraud database matching, and community reporting.",
+    techStack: ["Next.js", "FastAPI", "Python"],
+    heroImage: "",
+  },
+  {
+    slug: "vicore-virtual-career",
+    title: "ViCore (Virtual Career Orientation for SLB & Disabled Students)",
+    category: "Website",
+    shortDescription: "Inclusive virtual reality vocational orientation system built for special needs schools and disabled youth empowerment.",
+    techStack: ["Next.js", "Three.js", "WebXR"],
+    heroImage: "",
+  },
+  {
+    slug: "sitika-himatika",
+    title: "siTika - Sistem Informasi HIMATIKA",
+    category: "Mobile App",
+    shortDescription: "Centralized academic community application for university student organization management and notifications.",
+    techStack: ["Flutter", "Dart", "Firebase"],
+    heroImage: "",
+  },
 ];
 
 const Portfolio = ({ projects }: { projects?: ProjectData[] }) => {
-  const displayProjects = projects && projects.length > 0 ? projects.slice(0, 4) : [];
+  const displayProjects = projects && projects.length > 0 ? projects.slice(0, 4) : defaultProjects;
 
   return (
     <section className="section" id="projects">
@@ -27,57 +55,87 @@ const Portfolio = ({ projects }: { projects?: ProjectData[] }) => {
         </div>
 
         <div className="folio-grid" data-reveal>
-          {displayProjects.length > 0
-            ? displayProjects.map((project) => (
-                <Link
-                  key={project.slug}
-                  href={`/projects/${project.slug}`}
-                  className="folio-card"
-                >
+          {displayProjects.map((project, idx) => {
+            const techItems = (
+              project.techStack?.length
+                ? project.techStack
+                : (project as any).tags?.map((t: any) => t.name) || []
+            ).slice(0, 3);
+
+            return (
+              <Link
+                key={project.slug}
+                href={`/projects/${project.slug}`}
+                className="folio-card"
+              >
+                {/* Top Editorial Meta Strip */}
+                <div className="folio-card-meta">
+                  <span className="folio-index">
+                    {String(idx + 1).padStart(2, "0")} <span className="folio-sep">/</span> {project.category}
+                  </span>
+                  <span className="folio-status">
+                    <span className="folio-status-dot" />
+                    Live Project
+                  </span>
+                </div>
+
+                {/* Viewport Frame with Minimal Chrome */}
+                <div className="folio-frame">
+                  <div className="folio-frame-chrome">
+                    <div className="folio-dots" aria-hidden="true">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                    <span className="folio-frame-url">
+                      {project.slug}.dulcoon.dev
+                    </span>
+                  </div>
                   <div className="folio-thumb">
-                    {project.heroImage && (
+                    {project.heroImage ? (
                       <Image
                         src={project.heroImage}
                         alt={project.title}
                         fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 580px"
+                        className="folio-img"
                       />
+                    ) : (
+                      <div className="folio-thumb-placeholder" />
                     )}
                   </div>
-                  <div className="folio-body">
-                    <div className="folio-body-content">
-                      <span className="folio-tag">{project.category}</span>
-                      <h3>{project.title}</h3>
+                </div>
+
+                {/* Body Content */}
+                <div className="folio-body">
+                  <div className="folio-body-content">
+                    <h3 className="folio-title">{project.title}</h3>
+                    {project.shortDescription && (
+                      <p className="folio-desc">{project.shortDescription}</p>
+                    )}
+                  </div>
+
+                  {/* Footer with Tech Stack and Action Link */}
+                  <div className="folio-footer">
+                    <div className="folio-tech-list">
+                      {techItems.map((tech: string) => (
+                        <span key={tech} className="folio-tech-pill">
+                          {tech}
+                        </span>
+                      ))}
                     </div>
-                    <div className="folio-arrow">
+
+                    <div className="folio-arrow-btn" aria-hidden="true">
+                      <span className="folio-arrow-text">Explore</span>
                       <svg className="icon" viewBox="0 0 24 24">
-                        <path d="M5 12h14M13 6l6 6-6 6" />
+                        <path d="M7 17L17 7M7 7h10v10" />
                       </svg>
                     </div>
                   </div>
-                </Link>
-              ))
-            : defaultProjects.map((p) => (
-                <Link
-                  key={p.slug}
-                  href={`/projects`}
-                  className="folio-card"
-                >
-                  <div className="folio-thumb"></div>
-                  <div className="folio-body">
-                    <div className="folio-body-content">
-                      <span className="folio-tag">{p.category}</span>
-                      <h3>{p.title}</h3>
-                    </div>
-                    <div className="folio-arrow">
-                      <svg className="icon" viewBox="0 0 24 24">
-                        <path d="M5 12h14M13 6l6 6-6 6" />
-                      </svg>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
         {/* View All Projects Shortcut */}

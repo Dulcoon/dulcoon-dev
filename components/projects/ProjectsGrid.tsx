@@ -53,94 +53,87 @@ const ProjectsGrid = ({ projects }: { projects: ProjectData[] }) => {
         <div
           className="folio-grid"
           data-reveal
-          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}
+          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))" }}
         >
-          {filtered.map((project) => (
-            <Link
-              href={`/projects/${project.slug}`}
-              key={project.slug}
-              className="folio-card"
-            >
-              {/* Thumb */}
-              <div className="folio-thumb">
-                {project.heroImage && (
-                  <img
-                    alt={project.title}
-                    src={project.heroImage}
-                    className="w-full h-full object-cover"
-                    style={{ opacity: 0.85, transition: "transform 0.7s var(--ease)", width: "100%", height: "100%" }}
-                  />
-                )}
-                {/* Hover overlay */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background: "var(--accent-soft)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    opacity: 0,
-                    transition: "opacity 0.3s var(--ease)",
-                    zIndex: 2,
-                  }}
-                  className="folio-hover-overlay"
-                >
-                  <span
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontWeight: 700,
-                      fontSize: "0.82rem",
-                      padding: "8px 18px",
-                      borderRadius: "100px",
-                      background: "var(--accent)",
-                      color: "var(--accent-ink)",
-                    }}
-                  >
-                    View Project
+          {filtered.map((project, idx) => {
+            const techItems = (
+              project.techStack?.length
+                ? project.techStack
+                : project.tags?.map((t) => t.name) || []
+            ).slice(0, 3);
+
+            return (
+              <Link
+                href={`/projects/${project.slug}`}
+                key={project.slug}
+                className="folio-card"
+              >
+                {/* Top Editorial Meta Strip */}
+                <div className="folio-card-meta">
+                  <span className="folio-index">
+                    {String(idx + 1).padStart(2, "0")} <span className="folio-sep">/</span> {project.category}
+                  </span>
+                  <span className="folio-status">
+                    <span className="folio-status-dot" />
+                    Live Project
                   </span>
                 </div>
-              </div>
 
-              {/* Info */}
-              <div className="folio-body">
-                <div>
-                  <span className="folio-tag">{project.category}</span>
-                  <h3 style={{ marginTop: "6px" }}>{project.title}</h3>
-                  {project.shortDescription && (
-                    <p style={{ fontSize: "0.82rem", color: "var(--text-muted)", marginTop: "6px" }}>
-                      {project.shortDescription}
-                    </p>
-                  )}
-                  {/* Tech tags */}
-                  {project.tags && project.tags.length > 0 && (
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "10px" }}>
-                      {project.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag.name}
-                          style={{
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "0.65rem",
-                            padding: "3px 8px",
-                            borderRadius: "100px",
-                            border: "1px solid var(--border)",
-                            color: "var(--text-faint)",
-                          }}
-                        >
-                          {tag.name}
+                {/* Viewport Frame with Minimal Chrome */}
+                <div className="folio-frame">
+                  <div className="folio-frame-chrome">
+                    <div className="folio-dots" aria-hidden="true">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                    <span className="folio-frame-url">
+                      {project.slug}.dulcoon.dev
+                    </span>
+                  </div>
+                  <div className="folio-thumb">
+                    {project.heroImage ? (
+                      <img
+                        alt={project.title}
+                        src={project.heroImage}
+                        className="folio-img"
+                      />
+                    ) : (
+                      <div className="folio-thumb-placeholder" />
+                    )}
+                  </div>
+                </div>
+
+                {/* Body Content */}
+                <div className="folio-body">
+                  <div className="folio-body-content">
+                    <h3 className="folio-title">{project.title}</h3>
+                    {project.shortDescription && (
+                      <p className="folio-desc">{project.shortDescription}</p>
+                    )}
+                  </div>
+
+                  {/* Footer with Tech Stack and Action Link */}
+                  <div className="folio-footer">
+                    <div className="folio-tech-list">
+                      {techItems.map((tech) => (
+                        <span key={tech} className="folio-tech-pill">
+                          {tech}
                         </span>
                       ))}
                     </div>
-                  )}
+
+                    <div className="folio-arrow-btn" aria-hidden="true">
+                      <span className="folio-arrow-text">Explore</span>
+                      <svg className="icon" viewBox="0 0 24 24">
+                        <path d="M7 17L17 7M7 7h10v10" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
-                <div className="folio-arrow">
-                  <svg className="icon" viewBox="0 0 24 24">
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Empty state */}

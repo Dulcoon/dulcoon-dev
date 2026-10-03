@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const Hero = () => {
   const visualRef = useRef<HTMLDivElement>(null);
@@ -61,6 +62,38 @@ const Hero = () => {
 
   return (
     <section className="hero" id="home">
+      {/* Theme & Device Responsive Background Backdrop */}
+      <div className="hero-backdrop" aria-hidden="true">
+        {/* Desktop: Moody Modern Architecture in Shadow for both Dark and Light themes */}
+        <Image
+          src="/hero/Moody Modern Architecture in Shadow.png"
+          alt=""
+          fill
+          priority
+          sizes="(min-width: 768px) 100vw, 1px"
+          className="hero-bg-img hero-bg--desktop"
+        />
+        {/* Mobile Dark: Cinematic Sunlit Concrete Interior */}
+        <Image
+          src="/hero/Cinematic Sunlit Concrete Interior.png"
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 767px) 100vw, 1px"
+          className="hero-bg-img hero-bg--mobile-dark"
+        />
+        {/* Mobile Light: Sunlit Minimalist Stone Stair Lobby */}
+        <Image
+          src="/hero/Sunlit Minimalist Stone Stair Lobby.png"
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 767px) 100vw, 1px"
+          className="hero-bg-img hero-bg--mobile-light"
+        />
+        <div className="hero-backdrop-scrim" />
+      </div>
+
       <div className="wrap hero-grid stagger-in" id="heroStagger">
         {/* ===== LEFT CONTENT ===== */}
         <div>
@@ -149,43 +182,32 @@ const Hero = () => {
           style={{ ["--i" as any]: 2 }}
         >
           <div ref={stackRef} className="device-stack" id="deviceStack">
-            <div className="browser-win">
-              <div className="browser-bar">
-                <span></span>
-                <span></span>
-                <span></span>
-                <div className="url">dulcoon.dev</div>
-              </div>
-              <div className="browser-body">
-                <div className="skel w40"></div>
-                <div className="skel w80"></div>
-                <div className="skel w60"></div>
-                <div className="skel-block"></div>
-              </div>
-            </div>
-
-            <div className="phone-frame">
-              <div className="phone-notch"></div>
-              <div className="phone-body">
-                <div className="skel w60"></div>
-                <div className="skel w80"></div>
-                <div className="skel-block" style={{ height: "90px" }}></div>
-                <div className="phone-cta"></div>
-              </div>
+            <div className="hero-laptop-wrap">
+              <Image
+                src="/hero/Space Gray Laptop with Dark Dashboard.png"
+                alt="dulcoon.dev production dashboard on Space Gray MacBook"
+                width={1536}
+                height={1024}
+                priority
+                className="hero-laptop-img"
+                sizes="(max-width: 640px) 96vw, (max-width: 960px) 85vw, (max-width: 1200px) 52vw, 760px"
+              />
+              <div className="hero-laptop-glow" aria-hidden="true" />
             </div>
 
             <div className="float-chip c1">
+              <span className="chip-dot" />
               <svg className="icon" viewBox="0 0 24 24">
                 <path d="M20 6L9 17l-5-5" />
               </svg>
-              Build passing
+              <span>Build passing</span>
             </div>
 
             <div className="float-chip c2">
               <svg className="icon" viewBox="0 0 24 24">
                 <path d="M13 2L4 14h7l-1 8 9-12h-7z" />
               </svg>
-              99 Perf. Score
+              <span>99 Perf. Score</span>
             </div>
           </div>
         </div>
